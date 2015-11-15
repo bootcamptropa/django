@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'saveserches',
     'states',
     'transactions',
-    #'users',
+    'users',
     'walladog',
 
     #Rest_framework
