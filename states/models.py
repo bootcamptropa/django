@@ -1,3 +1,8 @@
 from django.db import models
 
-# Create your models here.
+class State(models.Model):
+    name = models.CharField(max_length=30)
+    active = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.name

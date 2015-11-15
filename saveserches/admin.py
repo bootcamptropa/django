@@ -1,3 +1,4 @@
 from django.contrib import admin
+from saveserches.models import SavedSearch
 
-# Register your models here.
+admin.site.register(SavedSearch)
