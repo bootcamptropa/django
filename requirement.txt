@@ -1,0 +1,4 @@
+Django==1.8.6
+MySQL-python==1.2.5
+django-mysql==1.0.0
+djangorestframework==3.3.1
