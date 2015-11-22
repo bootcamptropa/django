@@ -7,7 +7,3 @@ class UserDetail(models.Model):
     latitude = models.FloatField(null=True)
     token_facebook = models.CharField(null=True)
     avatar_url = models.URLField(null=True)
-
-
-    def __unicode__(self):
-        return self.name
