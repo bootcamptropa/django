@@ -87,7 +87,13 @@ WSGI_APPLICATION = 'walladog.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -107,7 +113,7 @@ DATABASES = {
     },
 
 }
-
+"""
 
 # POR SI QUEREIS TRABAJAR EN LOCAL CON SQLITE
 # DATABASES = {
@@ -138,3 +144,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# REST FRAMEWORK
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 5,
+    'PAGINATE_BY_PARAM': 'page_size',
+    'MAX_PAGINATE_BY': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
