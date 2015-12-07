@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework.routers import DefaultRouter
+from users.api import UserViewSet
+
+#APIRouter
+router = DefaultRouter()
+router.register(r'api/1.0/users', UserViewSet, base_name='user')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^api/1.0/login/', include('rest_framework.urls',namespace='rest_framework')),
+
+    # API URLs
+    url(r'', include(router.urls)),
 ]
