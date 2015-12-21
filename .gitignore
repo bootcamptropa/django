@@ -73,3 +73,5 @@ target/
 
 
 .idea/*
+
+db.sqlite3

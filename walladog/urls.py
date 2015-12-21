@@ -17,10 +17,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from users.api import UserViewSet
+from categories.api import CategoryViewSet
 
 #APIRouter
 router = DefaultRouter()
 router.register(r'api/1.0/users', UserViewSet, base_name='user')
+router.register(r'api/1.0/categories', CategoryViewSet, base_name='category')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
