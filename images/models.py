@@ -3,7 +3,7 @@ from products.models import Product
 
 class Image(models.Model):
     name = models.CharField(max_length=30)
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, related_name='images')
     photo_url = models.URLField()
 
     def __unicode__(self):
