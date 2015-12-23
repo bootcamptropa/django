@@ -20,6 +20,7 @@ from users.api import UserViewSet
 from categories.api import CategoryViewSet
 from races.api import RacesViewSet
 from states.api import StatesViewSet
+from products.api import ProductsViewSet
 
 #APIRouter
 router = DefaultRouter()
@@ -27,6 +28,7 @@ router.register(r'api/1.0/users', UserViewSet, base_name='user')
 router.register(r'api/1.0/categories', CategoryViewSet, base_name='category')
 router.register(r'api/1.0/races', RacesViewSet, base_name='race')
 router.register(r'api/1.0/states', StatesViewSet, base_name='states')
+router.register(r'api/1.0/products', ProductsViewSet, base_name='product')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
