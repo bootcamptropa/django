@@ -1,34 +1,48 @@
-# -*- coding: utf-8 -*-
+
+#
+# from django.shortcuts import get_object_or_404
 
 from users.models import UserDetail
 from users.serializers import UserSerializer
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
-from users.permissions import UserPermission
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope
+
 
 class UserViewSet(GenericViewSet):
 
-    pagination_class = PageNumberPagination
-    permission_classes = (UserPermission,)
-    serializer_class = UserSerializer
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [TokenHasScope]
+    required_scopes = ['write']
+
     queryset = UserDetail.objects.all()
+    serializer_class = UserSerializer
 
     def list(self, request):
 
-        users = UserDetail.objects.all()
-        self.paginate_queryset(users)  # pagino el resultado
-        serializer = UserSerializer(users, many=True)
-        return self.get_paginated_response(serializer.data)  # devuelvo una respuesta paginada
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get_paginated_response(self, data):
+
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
 
     def create(self, request):
 
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
-            new_user = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
