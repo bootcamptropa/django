@@ -51,6 +51,7 @@ INSTALLED_APPS = (
 
     #Rest_framework
     'rest_framework',
+    'oauth2_provider'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,7 +132,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -139,11 +139,16 @@ STATIC_URL = '/static/'
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-    'PAGINATE_BY': 5,
-    'PAGINATE_BY_PARAM': 'page_size',
-    'MAX_PAGINATE_BY': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    )
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    ),
+}
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups'}
 }
