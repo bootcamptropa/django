@@ -13,7 +13,7 @@ class StatesViewSet (GenericViewSet):
     required_scopes = ['read']
 
     serializer_class = StatesSerializer
-    queryset = State.objects.all()
+    queryset = State.objects.filter(active=1)
 
     def list(self, request):
 

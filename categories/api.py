@@ -12,7 +12,7 @@ class CategoryViewSet (GenericViewSet):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
 
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(active=1)
     serializer_class = CategorySerializer
 
     def list(self, request):

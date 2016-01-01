@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
+from models import Race
 
-class RacesSerializer (serializers.Serializer):
+class RacesSerializer (serializers.ModelSerializer):
 
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
-    active = serializers.BooleanField()
+    class Meta:
+        model = Race
+        fields = ('id', 'name')

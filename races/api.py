@@ -13,7 +13,7 @@ class RacesViewSet (GenericViewSet):
     required_scopes = ['read']
 
     serializer_class = RacesSerializer
-    queryset = Race.objects.all()
+    queryset = Race.objects.filter(active=1)
 
     def list(self, request):
 
