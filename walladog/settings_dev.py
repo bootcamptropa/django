@@ -1,6 +1,6 @@
 import os
 
-from walladog.settings import BASE_DIR
+from walladog.settings import *
 
 STATIC_ROOT = os.path.join(BASE_DIR,'static/')
 
