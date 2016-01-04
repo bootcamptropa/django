@@ -97,6 +97,14 @@ DATABASES = {
         'HOST': 'mysql.develjitsu.com',
         'PORT': '3306',
     },
+    'dev': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'walladog_dev',
+        'USER': 'walladog',
+        'PASSWORD': 'Keepcoding123',
+        'HOST': 'mysql.develjitsu.com',
+        'PORT': '3306',
+    },
     'prod': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'walladog',
@@ -134,8 +142,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
-
 # REST FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -154,3 +160,6 @@ OAUTH2_PROVIDER = {
         'write': 'Write scope',
         'groups': 'Access to your groups'}
 }
+
+
+STATIC_URL = '/static/'
