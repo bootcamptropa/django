@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from rest_framework import serializers
+from states.models import State
 
-class StatesSerializer (serializers.Serializer):
+class StatesSerializer (serializers.ModelSerializer):
 
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
-    active = serializers.BooleanField()
+    class Meta:
+        model = State
+        fields = ('id', 'name')

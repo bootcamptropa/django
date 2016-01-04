@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 class CategoryViewSet (GenericViewSet):
 
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(active=1)
     serializer_class = CategorySerializer
 
     def list(self, request):
