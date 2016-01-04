@@ -15,7 +15,28 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework.routers import DefaultRouter
+from users.api import UserViewSet
+from categories.api import CategoryViewSet
+from races.api import RacesViewSet
+from states.api import StatesViewSet
+from products.api import ProductsViewSet
+
+#APIRouter
+router = DefaultRouter()
+router.register(r'api/1.0/users', UserViewSet, base_name='user')
+router.register(r'api/1.0/categories', CategoryViewSet, base_name='category')
+router.register(r'api/1.0/races', RacesViewSet, base_name='race')
+router.register(r'api/1.0/states', StatesViewSet, base_name='states')
+router.register(r'api/1.0/products', ProductsViewSet, base_name='product')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^api/1.0/login/', include('rest_framework.urls',namespace='rest_framework')),
+
+    # API URLs
+    url(r'', include(router.urls)),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]

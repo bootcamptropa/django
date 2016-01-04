@@ -37,6 +37,21 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #proyect apps
+    'categories',
+    'images',
+    'products',
+    'races',
+    'saveserches',
+    'states',
+    'transactions',
+    'users',
+    'walladog',
+
+    #Rest_framework
+    'rest_framework',
+    'oauth2_provider'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -73,7 +88,6 @@ WSGI_APPLICATION = 'walladog.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -83,17 +97,15 @@ DATABASES = {
         'HOST': 'mysql.develjitsu.com',
         'PORT': '3306',
     },
-    'prod': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'walladog',
-        'USER': 'walladog',
-        'PASSWORD': 'xxx',
-        'HOST': 'mysql.develjitsu.com',
-        'PORT': '3306',
-    },
-
+    # 'prod': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'walladog',
+    #     'USER': 'walladog',
+    #     'PASSWORD': 'xxx',
+    #     'HOST': 'mysql.develjitsu.com',
+    #     'PORT': '3306',
+    # },
 }
-
 
 # POR SI QUEREIS TRABAJAR EN LOCAL CON SQLITE
 # DATABASES = {
@@ -119,8 +131,26 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# REST FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups'}
+}

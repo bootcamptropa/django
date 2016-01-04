@@ -34,6 +34,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+static/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -72,3 +73,5 @@ target/
 
 
 .idea/*
+
+db.sqlite3
