@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from products.serializers import ProductsSerializer, ProductsListSerializer
