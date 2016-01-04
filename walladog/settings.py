@@ -97,14 +97,14 @@ DATABASES = {
         'HOST': 'mysql.develjitsu.com',
         'PORT': '3306',
     },
-    # 'prod': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'walladog',
-    #     'USER': 'walladog',
-    #     'PASSWORD': 'xxx',
-    #     'HOST': 'mysql.develjitsu.com',
-    #     'PORT': '3306',
-    # },
+    'prod': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'walladog',
+        'USER': 'walladog',
+        'PASSWORD': 'xxx',
+        'HOST': 'mysql.develjitsu.com',
+        'PORT': '3306',
+    },
 }
 
 # POR SI QUEREIS TRABAJAR EN LOCAL CON SQLITE
