@@ -25,11 +25,11 @@ class UserViewSet(GenericViewSet):
 
     def create(self, request):
 
-        serializer = UserSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user_save = serializer.save()
+            return Response(user_save.user_id, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -37,7 +37,7 @@ class UserViewSet(GenericViewSet):
 
         user = get_object_or_404(UserDetail, pk=pk)
         self.check_object_permissions(request, user)
-        serializer = UserSerializer(user)
+        serializer = self.get_serializer(user)
         serialized_user = serializer.data
         return Response(serialized_user)
 
@@ -45,7 +45,7 @@ class UserViewSet(GenericViewSet):
 
         user = get_object_or_404(UserDetail, pk=pk)
         self.check_object_permissions(request, user)
-        serializer = UserSerializer(instance=user, data=request.data)
+        serializer = self.get_serializer(instance=user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -58,9 +58,6 @@ class UserViewSet(GenericViewSet):
         self.check_object_permissions(request, user)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_serializer_class(self):
-        return UserSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
