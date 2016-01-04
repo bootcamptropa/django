@@ -1,16 +1,9 @@
-# -*- coding: utf-8 -*-
-
-from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from states.serializers import StatesSerializer
 from states.models import State
 
 class StatesViewSet (GenericViewSet):
-
-    authentication_classes = [OAuth2Authentication]
-    permission_classes = [TokenHasScope]
-    required_scopes = ['read']
 
     serializer_class = StatesSerializer
     queryset = State.objects.filter(active=1)

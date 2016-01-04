@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 from rest_framework import serializers
-from models import Race
+from races.models import Race
 
 class RacesSerializer (serializers.ModelSerializer):
 

@@ -1,33 +1,35 @@
-# -*- coding: utf-8 -*-
-
+from django.contrib.auth.models import User
 from users.models import UserDetail
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
 class UserSerializer(serializers.Serializer):
 
     id = serializers.ReadOnlyField()
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    first_name = serializers.CharField(allow_null=True, source='user.first_name', default='')
+    last_name = serializers.CharField(allow_null=True, source='user.last_name', default='')
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    longitude = serializers.FloatField()
-    latitude = serializers.FloatField()
-    token_facebook = serializers.CharField()
-    avatar_url = serializers.URLField()
+    longitude = serializers.FloatField(allow_null=True, default=None)
+    latitude = serializers.FloatField(allow_null=True, default=None)
+    token_facebook = serializers.CharField(allow_null=True, default=None)
+    avatar_url = serializers.URLField(allow_null=True, default=None)
 
     def create(self, validated_data):
 
         instance = UserDetail()
-        userData = validated_data.get('user')
-        user = User.objects.create_user(username=userData.get('username'), email=userData.get('email'), password=userData.get('password'), first_name=userData.get('first_name'), last_name=userData.get('last_name'))
+        user_data = validated_data.get('user')
+        user = User.objects.create_user(username=user_data.get('username'),
+                                        email=user_data.get('email'),
+                                        password=user_data.get('password'),
+                                        first_name=user_data.get('first_name'),
+                                        last_name=user_data.get('last_name'))
 
         if user:
             instance.user = user
-            userExt = self.update(instance, validated_data)
+            user_ext = self.update(instance, validated_data)
 
-        return userExt
+        return user_ext
 
     def update(self, instance, validated_data):
 
@@ -46,7 +48,6 @@ class UserSerializer(serializers.Serializer):
         instance.save()
 
         return instance
-
 
     def validate_username(self, data):
 

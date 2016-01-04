@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from rest_framework import serializers
-from models import State
+from states.models import State
 
 class StatesSerializer (serializers.ModelSerializer):
 
