@@ -97,15 +97,14 @@ DATABASES = {
         'HOST': 'mysql.develjitsu.com',
         'PORT': '3306',
     },
-    'prod': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'walladog',
-        'USER': 'walladog',
-        'PASSWORD': 'xxx',
-        'HOST': 'mysql.develjitsu.com',
-        'PORT': '3306',
-    },
-
+    # 'prod': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'walladog',
+    #     'USER': 'walladog',
+    #     'PASSWORD': 'xxx',
+    #     'HOST': 'mysql.develjitsu.com',
+    #     'PORT': '3306',
+    # },
 }
 
 # POR SI QUEREIS TRABAJAR EN LOCAL CON SQLITE
@@ -142,6 +141,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 

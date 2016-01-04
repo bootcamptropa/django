@@ -7,6 +7,8 @@ class UserDetail(models.Model):
     latitude = models.FloatField(null=True)
     token_facebook = models.CharField(null=True, max_length=255)
     avatar_url = models.URLField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.user.first_name+" "+self.user.last_name
+        return self.user.first_name + " " + self.user.last_name
