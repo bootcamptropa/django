@@ -32,8 +32,7 @@ router.register(r'api/1.0/products', ProductsViewSet, base_name='product')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-
-    url(r'^api/1.0/login/', include('rest_framework.urls',namespace='rest_framework')),
+    url(r'^api/1.0/', include('rest_framework.urls', namespace='rest_framework')),
 
     # API URLs
     url(r'', include(router.urls)),

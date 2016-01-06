@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasResourceScope
 
 from users.models import UserDetail
 from users.serializers import UserSerializer
@@ -24,6 +25,9 @@ class UserViewSet(GenericViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+
+        authentication_classes = [OAuth2Authentication]
+        permission_classes = [TokenHasResourceScope]
 
         serializer = self.get_serializer(data=request.data)
 
