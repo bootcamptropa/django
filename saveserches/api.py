@@ -1,37 +1,21 @@
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 from saveserches.models import SavedSearch
+from saveserches.permissions import SaveSerchesPermission
 from saveserches.serializers import SaveSerchesSerializer, SaveSerchesListSerializer
 
-
-class SaveSerchesViewSet (GenericViewSet):
+class SaveSerchesViewSet (ModelViewSet):
 
     serializer_class = SaveSerchesSerializer
-    queryset = SavedSearch.objects.all()
+    permission_classes = (SaveSerchesPermission,)
 
-    def list(self, request):
+    def get_queryset(self):
+        return SavedSearch.objects.filter(user=self.request.user)
 
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        self.serializer_class = SaveSerchesListSerializer
-
-        if page is not None:
-          serializer = self.get_serializer(page, many=True)
-          return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return SaveSerchesListSerializer
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return SaveSerchesSerializer
 
     def get_paginated_response(self, data):
 
