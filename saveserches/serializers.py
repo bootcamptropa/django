@@ -13,4 +13,4 @@ class SaveSerchesListSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = SavedSearch
-        fields = ('id', 'keywords', 'category', 'latitude', 'longitude', 'race')
+        fields = ('id', 'name', 'keywords', 'category', 'latitude', 'longitude', 'race')
