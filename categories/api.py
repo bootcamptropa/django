@@ -2,11 +2,14 @@ import datetime
 
 from rest_framework import status
 from categories.models import Category
+from categories.permissions import CategoryPermission
 from categories.serializers import CategorySerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
 class CategoryViewSet (GenericViewSet):
+
+    permission_classes = [CategoryPermission]
 
     queryset = Category.objects.filter(active=1)
     serializer_class = CategorySerializer

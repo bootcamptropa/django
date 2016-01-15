@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.Serializer):
 
-    id = serializers.ReadOnlyField()
+    id = serializers.ReadOnlyField(source='user.id')
     first_name = serializers.CharField(allow_null=True, source='user.first_name', default='')
     last_name = serializers.CharField(allow_null=True, source='user.last_name', default='')
     username = serializers.CharField(source='user.username')

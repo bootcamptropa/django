@@ -20,7 +20,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=30)),
-                ('gender', models.CharField(default=b'NON', max_length=3, choices=[(b'MAL', b'Male'), (b'FEM', b'Female'), (b'NON', b'')])),
+                ('gender', models.CharField(default=b'NON', max_length=3,
+                                            choices=[(b'MAL', b'Male'), (b'FEM', b'Female'), (b'NON', b'')])),
                 ('sterile', models.BooleanField(default=False)),
                 ('description', models.CharField(default=b'', max_length=250)),
                 ('published_date', models.DateTimeField(auto_now_add=True)),
