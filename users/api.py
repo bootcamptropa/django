@@ -1,6 +1,9 @@
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import detail_route
 
 from users.models import UserDetail
+from users.permissions import UserPermission, LoginPermission
 from users.serializers import UserSerializer
 from rest_framework import status
 from rest_framework.response import Response
@@ -8,10 +11,11 @@ from rest_framework.viewsets import GenericViewSet
 
 class UserViewSet(GenericViewSet):
 
+    permission_classes = [UserPermission]
     queryset = UserDetail.objects.all()
     serializer_class = UserSerializer
 
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
 
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
@@ -61,3 +65,39 @@ class UserViewSet(GenericViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class LoginViewSet(GenericViewSet):
+
+    permission_classes = [LoginPermission]
+    queryset = UserDetail.objects.all()
+    serializer_class = UserSerializer
+
+    def list(self, request, *args, **kwargs):
+
+        user = request.user
+
+        if user is not None:
+            if user.is_active:
+                user_dateail = get_object_or_404(UserDetail, pk=user.id)
+                serializer = self.get_serializer(user_dateail)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request):
+
+        username = request.data.get('user_name')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                user_dateail = get_object_or_404(UserDetail, pk=user.id)
+                serializer = self.get_serializer(user_dateail)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
+        else:
+             return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)

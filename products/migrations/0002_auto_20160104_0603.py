@@ -21,7 +21,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='gender',
-            field=models.CharField(choices=[('MAL', 'Male'), ('FEM', 'Female'), ('NON', '')], default='NON', max_length=3),
+            field=models.CharField(choices=[('MAL', 'Male'), ('FEM', 'Female'), ('NON', '')],
+                                   default='NON', max_length=3),
         ),
         migrations.AlterField(
             model_name='product',
