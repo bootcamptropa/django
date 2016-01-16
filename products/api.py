@@ -2,14 +2,12 @@ import uuid
 
 import boto3
 from rest_framework import status
-from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from images.models import Image
 from products.serializers import ProductsSerializer
 from products.models import Product
-from rest_framework import views
 
 class ProductsViewSet (ModelViewSet):
 
@@ -91,19 +89,3 @@ class ProductsViewSet (ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class FileUploadView(views.APIView):
-
-    parser_classes = (FormParser, MultiPartParser,)
-
-    def post(self, request):
-
-        uuid_id = uuid.uuid4()
-        upload_files = request.FILES.getlist('upload_image')
-        s3 = boto3.resource('s3')
-        bucket = s3.Bucket('walladog')
-        for index in range(len(upload_files)):
-            up_file = upload_files[index]
-            keyFile = uuid_id + str(index) + ".jpeg"
-            bucket.put_object(ACL='public-read', Key=keyFile, Body=up_file, ContentType='image/jpeg')
-        return Response(up_file.name, status.HTTP_201_CREATED)
