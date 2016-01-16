@@ -35,7 +35,7 @@ class TransactionsViewSet(GenericViewSet):
 
         if serializer.is_valid():
 
-            transaction_save = serializer.save(buyer=self.request.user,seller=product.seller)
+            transaction_save = serializer.save(buyer=self.request.user,seller=product.seller.user)
             return Response(transaction_save.id, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -56,22 +56,3 @@ class TransactionsViewSet(GenericViewSet):
 
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
-
-"""
-    def get_queryset(self):
-        return Transaction.objects.filter(buyer=self.request.user, seller=self.request.user)
-
-    def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
-            return TransactionsListSerializer
-        else:
-            return TransactionsSerializer
-
-    def get_paginated_response(self, data):
-
-        assert self.paginator is not None
-        return self.paginator.get_paginated_response(data)
-
-    def perform_create(self, serializer):
-        serializer.save(buyer=self.request.user)
-        """

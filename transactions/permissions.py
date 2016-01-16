@@ -3,7 +3,8 @@ from rest_framework.permissions import BasePermission
 
 class TransactionPermission(BasePermission):
     def has_permission(self, request, view):
-        if view.action in ('list', 'retrieve', 'create'):
+
+        if request.user.is_authenticated() and view.action in ('list', 'retrieve', 'create'):
             return True
         else:
             return False
