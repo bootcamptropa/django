@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
-from saveserches.api import SaveSerchesViewSet
+from saveserches.api import SaveSearchesViewSet
 from transactions.api import TransactionsViewSet
 from users.api import UserViewSet
 from categories.api import CategoryViewSet
@@ -31,7 +31,7 @@ router.register(r'api/1.0/categories', CategoryViewSet, base_name='category')
 router.register(r'api/1.0/races', RacesViewSet, base_name='race')
 router.register(r'api/1.0/states', StatesViewSet, base_name='states')
 router.register(r'api/1.0/products', ProductsViewSet, base_name='product')
-router.register(r'api/1.0/searches', SaveSerchesViewSet, base_name='search')
+router.register(r'api/1.0/searches', SaveSearchesViewSet, base_name='search')
 router.register(r'api/1.0/transactions', TransactionsViewSet, base_name='transaction')
 
 urlpatterns = [

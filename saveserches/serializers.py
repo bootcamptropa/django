@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from saveserches.models import SavedSearch
 
-class SaveSerchesSerializer (serializers.ModelSerializer):
+class SaveSearchesSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = SavedSearch
 
-class SaveSerchesListSerializer (serializers.ModelSerializer):
+class SaveSearchesListSerializer (serializers.ModelSerializer):
 
     category = serializers.StringRelatedField()
     race = serializers.StringRelatedField()
