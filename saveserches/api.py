@@ -1,21 +1,21 @@
 from rest_framework.viewsets import ModelViewSet
 from saveserches.models import SavedSearch
-from saveserches.permissions import SaveSerchesPermission
-from saveserches.serializers import SaveSerchesSerializer, SaveSerchesListSerializer
+from saveserches.permissions import SaveSearchesPermission
+from saveserches.serializers import SaveSearchesSerializer, SaveSearchesListSerializer
 
-class SaveSerchesViewSet (ModelViewSet):
+class SaveSearchesViewSet (ModelViewSet):
 
-    serializer_class = SaveSerchesSerializer
-    permission_classes = (SaveSerchesPermission,)
+    serializer_class = SaveSearchesSerializer
+    permission_classes = (SaveSearchesPermission,)
 
     def get_queryset(self):
         return SavedSearch.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
-            return SaveSerchesListSerializer
+            return SaveSearchesListSerializer
         else:
-            return SaveSerchesSerializer
+            return SaveSearchesSerializer
 
     def get_paginated_response(self, data):
 
