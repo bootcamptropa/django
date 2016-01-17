@@ -1,19 +1,21 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import detail_route
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from users.models import UserDetail
 from users.permissions import UserPermission, LoginPermission
 from users.serializers import UserSerializer
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+
 
 class UserViewSet(GenericViewSet):
 
     permission_classes = [UserPermission]
     queryset = UserDetail.objects.all()
     serializer_class = UserSerializer
+
+    allowed_methods = ['get', 'post', 'put', 'delete', 'options']
 
     def list(self, request, *args, **kwargs):
 

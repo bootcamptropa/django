@@ -25,20 +25,25 @@ class ProductsViewSet (ModelViewSet):
         if longitude_update_string is not None:
             return Response("Missing parameter longitude", status=status.HTTP_400_BAD_REQUEST)
 
-        query = "SELECT *, st_distance_sphere(point(" + longitude_update_string + "," + latitude_update_string + "), " \
-                "Point(longitude,latitude))" \
-                "FROM    products_product   " \
-                "WHERE   MBRContains" \
-                "( LineString(" \
-                "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
-                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
-                "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
-                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
-                ")," \
-                "Point(longitude,latitude)" \
-                "); "
+        # Barcelona
+        # latitude_update_string = 41.390205
+        # longitude_update_string = 2.154007
 
-        products = Product.objects.raw(query)
+        # query = "SELECT *, st_distance_sphere(point(" + longitude_update_string + "," + latitude_update_string + "), " \
+        #         "Point(longitude,latitude))" \
+        #         "FROM    products_product   " \
+        #         "WHERE   MBRContains" \
+        #         "( LineString(" \
+        #         "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
+        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
+        #         "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
+        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
+        #         ")," \
+        #         "Point(longitude,latitude)" \
+        #         "); "
+
+        # products = Product.objects.raw(query)
+        products = Product.objects.all();
 
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)

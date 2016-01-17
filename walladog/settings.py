@@ -52,22 +52,24 @@ INSTALLED_APPS = (
     #Rest_framework
     'rest_framework',
     'oauth2_provider',
+    'corsheaders'
     # 'storages',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware'
 )
 
 ROOT_URLCONF = 'walladog.urls'
-11
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -145,6 +147,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata'
 }
 
 OAUTH2_PROVIDER = {
@@ -155,6 +158,15 @@ OAUTH2_PROVIDER = {
         'groups': 'Access to your groups'}
 }
 
+# CORS
+# APPEND_SLASH = False
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:9000',
+    'http://www.walladog.com',
+    'walladog.com'
+)
+CORS_URLS_REGEX = r'^/api/.*$'
 
 STATIC_URL = '/static/'
 
