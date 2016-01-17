@@ -1,3 +1,4 @@
+from geopy.distance import great_circle
 from rest_framework import serializers
 
 from images.serializers import ImageSerializer
@@ -6,11 +7,17 @@ from products.models import Product
 
 class ProductsSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
+    # distance = serializers.SerializerMethodField('get_distance')
 
     class Meta:
         model = Product
         fields = ('id', 'name', 'race', 'seller', 'gender', 'sterile', 'description', 'state', 'price', 'category',
                   'active', 'longitude', 'latitude', 'created_at', 'images')
+    #
+    # def get_distance(self):
+    #     location_one = (self.latitude, self.longitude)
+    #     location_two = (41.499498, -81.695391)
+    #     return great_circle(location_one, location_two).meters
 
     # def get_json(self):
     #     return {

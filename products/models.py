@@ -1,5 +1,4 @@
 from django.db import models
-
 from users.models import UserDetail
 from races.models import Race
 from states.models import State
