@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'oauth2_provider',
     'corsheaders'
+    # 'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -138,6 +139,7 @@ USE_TZ = True
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
@@ -167,3 +169,19 @@ CORS_ORIGIN_WHITELIST = (
 CORS_URLS_REGEX = r'^/api/.*$'
 
 STATIC_URL = '/static/'
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+
+#
+# AWS_ACCESS_KEY_ID = 'AKIAJYDV7TEBJS6JWEEQ'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'walladog'
+
+
+# AWS_QUERYSTRING_AUTH = False
+# AWS_ACCESS_KEY_ID = os.environ['AKIAJYDV7TEBJS6JWEEQ']
+# AWS_SECRET_ACCESS_KEY = os.environ['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']
+# AWS_STORAGE_BUCKET_NAME = os.environ['walladog']
+# MEDIA_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
