@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from users.models import UserDetail
@@ -10,6 +11,8 @@ class UserViewSet(GenericViewSet):
 
     queryset = UserDetail.objects.all()
     serializer_class = UserSerializer
+
+    allowed_methods = ['get', 'post', 'put', 'delete', 'options']
 
     def list(self, request):
 

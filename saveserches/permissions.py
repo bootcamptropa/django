@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 
 class SaveSerchesPermission(BasePermission):
     def has_permission(self, request, view):
-        if view.action in ('list', 'retrieve', 'create', 'destroy'):
+        if view.action in ('list', 'retrieve', 'create', 'destroy', 'metadata'):
             return True
         else:
             return False
