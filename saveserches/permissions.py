@@ -5,6 +5,8 @@ class SaveSearchesPermission(BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated() and view.action in ('list', 'retrieve', 'create', 'destroy'):
             return True
+        elif view.action == 'metadata':
+            return True
         else:
             return False
 
