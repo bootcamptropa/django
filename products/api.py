@@ -28,22 +28,23 @@ class ProductsViewSet (ModelViewSet):
         # Barcelona
         # latitude_update_string = 41.390205
         # longitude_update_string = 2.154007
-
         # query = "SELECT *, st_distance_sphere(point(" + longitude_update_string + "," + latitude_update_string + "), " \
-        #         "Point(longitude,latitude))" \
-        #         "FROM    products_product   " \
-        #         "WHERE   MBRContains" \
-        #         "( LineString(" \
-        #         "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
-        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
-        #         "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
-        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
-        #         ")," \
-        #         "Point(longitude,latitude)" \
-        #         "); "
 
-        # products = Product.objects.raw(query)
-        products = Product.objects.all();
+        query = "SELECT * " \
+                "Point(longitude,latitude))" \
+                "FROM    products_product   " \
+                "WHERE   MBRContains" \
+                "( LineString(" \
+                "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
+                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
+                "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
+                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
+                ")," \
+                "Point(longitude,latitude)" \
+                "); "
+
+        products = Product.objects.raw(query)
+
 
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
