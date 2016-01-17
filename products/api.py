@@ -19,32 +19,22 @@ class ProductsViewSet (ModelViewSet):
         latitude_update_string = self.request.query_params.get('latitude', None)
         longitude_update_string = self.request.query_params.get('longitude', None)
 
-        if latitude_update_string is not None:
-            return Response("Missing parameter latitude", status=status.HTTP_400_BAD_REQUEST)
-
-        if longitude_update_string is not None:
-            return Response("Missing parameter longitude", status=status.HTTP_400_BAD_REQUEST)
-
-        # Barcelona
-        # latitude_update_string = 41.390205
-        # longitude_update_string = 2.154007
-        # query = "SELECT *, st_distance_sphere(point(" + longitude_update_string + "," + latitude_update_string + "), " \
-
-        query = "SELECT * " \
-                "Point(longitude,latitude))" \
+        if latitude_update_string is None or longitude_update_string is None:
+            products = Product.objects.all()
+        else:
+            query = "SELECT * " \
                 "FROM    products_product   " \
-                "WHERE   MBRContains" \
-                "( LineString(" \
-                "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
-                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
-                "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
-                "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
+                "WHERE   MBRContains " \
+                "( " \
+                "LineString(" \
+                "Point (" + longitude_update_string + " - 10 / ( 111.1 / COS(RADIANS(" + latitude_update_string + ")))"\
+                ", " + latitude_update_string + " - 10 / 111.1)," \
+                "Point (" + longitude_update_string + " + 10 / ( 111.1 / COS(RADIANS(" + latitude_update_string + ")))"\
+                ", " + latitude_update_string + " + 10 / 111.1)" \
                 ")," \
                 "Point(longitude,latitude)" \
-                "); "
-
-        products = Product.objects.raw(query)
-
+                ") "
+            products = Product.objects.raw(query)
 
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
