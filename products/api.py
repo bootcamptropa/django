@@ -1,16 +1,18 @@
 import uuid
+from collections import OrderedDict
 
 import boto3
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
 from images.models import Image
+from products.permissions import ProductPermission
 from products.serializers import ProductsSerializer
 from products.models import Product
 
 class ProductsViewSet (ModelViewSet):
 
+    permission_classes = [ProductPermission]
     serializer_class = ProductsSerializer
     queryset = Product.objects.filter(active=1)
 
@@ -20,11 +22,11 @@ class ProductsViewSet (ModelViewSet):
         longitude_update_string = self.request.query_params.get('longitude', None)
 
         if latitude_update_string is None or longitude_update_string is None:
-            products = Product.objects.all()
+            query = "SELECT * FROM  products_product WHERE active = 1"
         else:
             query = "SELECT * " \
-                "FROM    products_product   " \
-                "WHERE   MBRContains " \
+                "FROM products_product " \
+                "WHERE active = 1 and MBRContains " \
                 "( " \
                 "LineString(" \
                 "Point (" + longitude_update_string + " - 10 / ( 111.1 / COS(RADIANS(" + latitude_update_string + ")))"\
@@ -33,20 +35,15 @@ class ProductsViewSet (ModelViewSet):
                 ", " + latitude_update_string + " + 10 / 111.1)" \
                 ")," \
                 "Point(longitude,latitude)" \
-                ") "
-            products = Product.objects.raw(query)
+                ")"
 
-        serializer = self.get_serializer(products, many=True)
-        return Response(serializer.data)
+        limit = self.paginator.get_limit(request)
+        offset = self.paginator.get_offset(request)
 
-    def create(self, request, **kwargs):
+        if limit is not None and offset is not None:
+            query = query + " LIMIT " + str(limit) + " OFFSET " + str(offset)
 
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        queryset = Product.objects.raw(query)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

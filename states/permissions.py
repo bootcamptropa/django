@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-class CategoryPermission(BasePermission):
+class StatePermission(BasePermission):
 
     def has_permission(self, request, view):
 
