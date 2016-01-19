@@ -34,8 +34,8 @@ class UserViewSet(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            user_save = serializer.save()
-            return Response(user_save.user_id, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -102,4 +102,4 @@ class LoginViewSet(GenericViewSet):
             else:
                 return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
         else:
-             return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Not valid User', status=status.HTTP_400_BAD_REQUEST)
