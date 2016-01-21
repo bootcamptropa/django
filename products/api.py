@@ -1,16 +1,18 @@
 import uuid
+from collections import OrderedDict
 
 import boto3
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
 from images.models import Image
+from products.permissions import ProductPermission
 from products.serializers import ProductsSerializer
 from products.models import Product
 
 class ProductsViewSet (ModelViewSet):
 
+    permission_classes = [ProductPermission]
     serializer_class = ProductsSerializer
     queryset = Product.objects.filter(active=1)
 
@@ -19,43 +21,29 @@ class ProductsViewSet (ModelViewSet):
         latitude_update_string = self.request.query_params.get('latitude', None)
         longitude_update_string = self.request.query_params.get('longitude', None)
 
-        if latitude_update_string is not None:
-            return Response("Missing parameter latitude", status=status.HTTP_400_BAD_REQUEST)
+        if latitude_update_string is None or longitude_update_string is None:
+            query = "SELECT * FROM  products_product WHERE active = 1"
+        else:
+            query = "SELECT * " \
+                "FROM products_product " \
+                "WHERE active = 1 and MBRContains " \
+                "( " \
+                "LineString(" \
+                "Point (" + longitude_update_string + " - 10 / ( 111.1 / COS(RADIANS(" + latitude_update_string + ")))"\
+                ", " + latitude_update_string + " - 10 / 111.1)," \
+                "Point (" + longitude_update_string + " + 10 / ( 111.1 / COS(RADIANS(" + latitude_update_string + ")))"\
+                ", " + latitude_update_string + " + 10 / 111.1)" \
+                ")," \
+                "Point(longitude,latitude)" \
+                ")"
 
-        if longitude_update_string is not None:
-            return Response("Missing parameter longitude", status=status.HTTP_400_BAD_REQUEST)
+        limit = self.paginator.get_limit(request)
+        offset = self.paginator.get_offset(request)
 
-        # Barcelona
-        # latitude_update_string = 41.390205
-        # longitude_update_string = 2.154007
+        if limit is not None and offset is not None:
+            query = query + " LIMIT " + str(limit) + " OFFSET " + str(offset)
 
-        # query = "SELECT *, st_distance_sphere(point(" + longitude_update_string + "," + latitude_update_string + "), " \
-        #         "Point(longitude,latitude))" \
-        #         "FROM    products_product   " \
-        #         "WHERE   MBRContains" \
-        #         "( LineString(" \
-        #         "Point (" + longitude_update_string + " - 10 / ( 111.1 / " \
-        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " - 10 / 111.1)," \
-        #         "Point (" + longitude_update_string + " + 10 / ( 111.1 / " \
-        #         "COS(RADIANS(" + latitude_update_string + ")))," + latitude_update_string + " + 10 / 111.1)" \
-        #         ")," \
-        #         "Point(longitude,latitude)" \
-        #         "); "
-
-        # products = Product.objects.raw(query)
-        products = Product.objects.all();
-
-        serializer = self.get_serializer(products, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, **kwargs):
-
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        queryset = Product.objects.raw(query)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
