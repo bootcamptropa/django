@@ -1,11 +1,9 @@
-from django.contrib.gis.forms import PointField
 from rest_framework import serializers
 
 from images.serializers import ImageSerializer
 from products.models import Product
 
 class ProductsSerializer(serializers.ModelSerializer):
-    location = PointField(required=True)
 
     class Meta:
         model = Product
@@ -20,7 +18,6 @@ class ProductsListSerializer(serializers.ModelSerializer):
     state = serializers.StringRelatedField()
     category = serializers.StringRelatedField()
     images = ImageSerializer(many=True)
-    location = PointField(required=False)
 
     class Meta:
         model = Product

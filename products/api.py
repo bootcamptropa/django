@@ -2,6 +2,7 @@ import uuid
 import boto3
 
 from django.shortcuts import get_object_or_404
+from math import cos, radians
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -18,26 +19,42 @@ class ProductsViewSet (ModelViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        latitude_update_string = self.request.query_params.get('latitude', None)
-        longitude_update_string = self.request.query_params.get('longitude', None)
+        latitude_update_string = self.request.query_params.get('lat', None)
+        longitude_update_string = self.request.query_params.get('lon', None)
 
+        category_id_filter = self.request.query_params.get('category', None)
+        race_id_filter = self.request.query_params.get('race', None)
+        state_id_filter = self.request.query_params.get('state', None)
 
-        # lon1 = float(longitude_update_string) - 10 / ( 111.1 / cos(radians(float(latitude_update_string))) )
-        # lat1 = float(latitude_update_string) - 10  / 111.1
-        #
-        # lon2 = float(longitude_update_string) + 10 / ( 111.1 / cos(radians(float(latitude_update_string))) )
-        # lat2 = float(latitude_update_string) + 10  / 111.1
-        #
-        # line_string = LineString(Point(lat1, lon1), Point(lat2, lon2))
-        # queryset = Product.objects.filter(location__contains=line_string)
-        queryset = self.filter_queryset(self.get_queryset())
+        if latitude_update_string is not None and longitude_update_string is not None:
+
+            lon1 = float(longitude_update_string) - 10 / (111.1 / cos(radians(float(latitude_update_string))))
+            lat1 = float(latitude_update_string) - 10 / 111.1
+
+            lon2 = float(longitude_update_string) + 10 / (111.1 / cos(radians(float(latitude_update_string))))
+            lat2 = float(latitude_update_string) + 10 / 111.1
+
+            line_string = 'LINESTRING (' + str(lat1) + ' ' + str(lon1) + ', ' + str(lat2) + ' ' + str(lon2) + ')'
+            queryset = Product.objects.filter(location__contained=line_string).filter(active=1)
+        else:
+            queryset = Product.objects.filter(active=1)
+
+        if race_id_filter is not None:
+            queryset = queryset.filter(race=race_id_filter)
+
+        if state_id_filter is not None:
+            queryset = queryset.filter(state=state_id_filter)
+
+        if category_id_filter is not None:
+            queryset = queryset.filter(category=category_id_filter)
+
         page = self.paginate_queryset(queryset)
 
         if page is not None:
             serializer = ProductsListSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = ProductsListSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk):
