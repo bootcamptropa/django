@@ -17,7 +17,7 @@ class LoginPermission(BasePermission):
 
     def has_permission(self, request, view):
 
-        if view.action == 'list':
+        if view.action in ['list', 'metadata']:
             return request.user.is_authenticated()
         else:
             return True

@@ -5,7 +5,5 @@ djangorestframework==3.3.2
 django-oauth-toolkit==0.10.0
 oauth2-provider
 django-cors-headers==1.1.0
-boto3==1.2.3
-django-extra-fields==0.5
-
-
+boto3
+djangorestframework-gis
