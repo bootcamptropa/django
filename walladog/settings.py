@@ -51,7 +51,6 @@ INSTALLED_APPS = (
 
     #Rest_framework
     'rest_framework',
-    'rest_framework_gis',
     'oauth2_provider',
     'corsheaders',
 )
