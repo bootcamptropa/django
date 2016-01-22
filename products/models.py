@@ -20,6 +20,14 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def _get_latitude(self):
+        return self.location.x
+    latitude = property(_get_latitude)
+
+    def _get_longitude(self):
+        return self.location.y
+    longitude = property(_get_longitude)
+
     def __unicode__(self):
         return self.name
 
