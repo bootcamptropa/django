@@ -14,7 +14,6 @@ class ProductsListSerializer(serializers.ModelSerializer):
 
     race = serializers.StringRelatedField()
     seller = serializers.StringRelatedField()
-    gender = serializers.StringRelatedField()
     state = serializers.StringRelatedField()
     category = serializers.StringRelatedField()
     images = ImageSerializer(many=True)
