@@ -52,8 +52,7 @@ INSTALLED_APPS = (
     #Rest_framework
     'rest_framework',
     'oauth2_provider',
-    'corsheaders'
-    # 'storages',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,7 +92,7 @@ WSGI_APPLICATION = 'walladog.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'walladog_dev',
         'USER': 'walladog',
         'PASSWORD': 'Keepcoding123',
@@ -166,7 +165,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://www.walladog.com',
     'walladog.com'
 )
-CORS_URLS_REGEX = r'^/api/.*$'
+# CORS_URLS_REGEX = r'^/api/.*$'
 
 STATIC_URL = '/static/'
 

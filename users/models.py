@@ -11,4 +11,14 @@ class UserDetail(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.user.first_name + " " + self.user.last_name
+        if self.user.first_name or self.user.last_name:
+            return self.user.first_name + " " + self.user.last_name
+        else:
+            return self.user
+
+    def __str__(self):
+        if self.user.first_name or self.user.last_name:
+            return self.user.first_name + " " + self.user.last_name
+        else:
+            return self.user.username
+

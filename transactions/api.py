@@ -35,7 +35,7 @@ class TransactionsViewSet(GenericViewSet):
 
         if serializer.is_valid():
 
-            transaction_save = serializer.save(buyer=self.request.user,seller=product.seller.user)
+            transaction_save = serializer.save(buyer=self.request.user, seller=product.seller.user)
             return Response(transaction_save.id, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
