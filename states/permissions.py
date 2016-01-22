@@ -7,4 +7,4 @@ class StatePermission(BasePermission):
         if view.action in ['list', 'metadata']:
             return True
         else:
-            return request.user.is_authenticated() and request.user.is_staff()
+            return request.user.is_authenticated() and request.user.is_staff
