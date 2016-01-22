@@ -1,5 +1,6 @@
 import uuid
 import boto3
+from django.contrib.gis.geos import LineString, Point
 
 from django.shortcuts import get_object_or_404
 from math import cos, radians
@@ -24,7 +25,7 @@ class ProductsViewSet (ModelViewSet):
 
         category_id_filter = self.request.query_params.get('category', None)
         race_id_filter = self.request.query_params.get('race', None)
-        state_id_filter = self.request.query_params.get('state', None)
+        state_id_filter = self.request.query_params.get('status', None)
 
         if latitude_update_string is not None and longitude_update_string is not None:
 
@@ -43,7 +44,7 @@ class ProductsViewSet (ModelViewSet):
             queryset = queryset.filter(race=race_id_filter)
 
         if state_id_filter is not None:
-            queryset = queryset.filter(state=state_id_filter)
+            queryset = queryset.filter(state=category_id_filter)
 
         if category_id_filter is not None:
             queryset = queryset.filter(category=category_id_filter)
@@ -68,6 +69,9 @@ class ProductsViewSet (ModelViewSet):
 
         serializer = self.get_serializer(data=request.data)
 
+        latitude = self.request.POST.get('latitude', None)
+        longitude = self.request.POST.get('longitude', None)
+
         if serializer.is_valid():
 
             upload_files = request.FILES.getlist('upload_image')
@@ -75,7 +79,13 @@ class ProductsViewSet (ModelViewSet):
             if upload_files is None or not upload_files:
                 return Response({"upload_image": "Not have images"}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = serializer.save(seller=request.user.userdetail)
+            if latitude is None:
+                return Response({"latitude": "Not have latitude"}, status=status.HTTP_400_BAD_REQUEST)
+
+            if longitude is None:
+                return Response({"longitude": "Not have longitude"}, status=status.HTTP_400_BAD_REQUEST)
+
+            product = serializer.save(seller=request.user.userdetail,location=Point(float(latitude), float(longitude)))
 
             s3 = boto3.resource('s3')
             bucket = s3.Bucket('walladog')

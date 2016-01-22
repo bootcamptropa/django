@@ -9,4 +9,4 @@ class ProductPermission(BasePermission):
         elif view.action in ['create']:
             return request.user.is_authenticated()
         else:
-            return request.user.is_authenticated() and request.user.is_staff()
+            return request.user.is_authenticated() and request.user.is_staff
