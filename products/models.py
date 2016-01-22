@@ -21,11 +21,11 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def _get_latitude(self):
-        return self.location.x
+        return str(self.location.x)
     latitude = property(_get_latitude)
 
     def _get_longitude(self):
-        return self.location.y
+        return str(self.location.y)
     longitude = property(_get_longitude)
 
     def __unicode__(self):
