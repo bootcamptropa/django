@@ -4,7 +4,7 @@ class ProductPermission(BasePermission):
 
     def has_permission(self, request, view):
 
-        if view.action in ['list', 'metadata']:
+        if view.action in ['list', 'metadata', 'retrieve']:
             return True
         elif view.action in ['create']:
             return request.user.is_authenticated()

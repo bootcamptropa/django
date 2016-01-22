@@ -7,7 +7,6 @@ class TransactionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ('id', 'product')
-        #read_only_fields = ('date_transaction')
 
 class TransactionsListSerializer(serializers.ModelSerializer):
 

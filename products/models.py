@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from users.models import UserDetail
 from races.models import Race
 from states.models import State
@@ -7,7 +7,7 @@ from products.settings import GENDERS
 
 class Product(models.Model):
     name = models.CharField(max_length=30)
-    race = models.ForeignKey(Race, null=False)
+    race = models.ForeignKey(Race, null=False, related_name='race')
     seller = models.ForeignKey(UserDetail, null=False)
     gender = models.CharField(max_length=3, choices=GENDERS, default='NON')
     sterile = models.BooleanField(default=False)
@@ -16,10 +16,12 @@ class Product(models.Model):
     price = models.FloatField(null=False, default=0)
     category = models.ForeignKey(Category)
     active = models.BooleanField(null=False, default=True)
-    longitude = models.FloatField(null=False)
-    latitude = models.FloatField(null=False)
+    location = models.PointField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name

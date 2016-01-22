@@ -53,7 +53,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'oauth2_provider',
     'corsheaders'
-    # 'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,11 +92,11 @@ WSGI_APPLICATION = 'walladog.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'walladog_dev',
         'USER': 'walladog',
         'PASSWORD': 'Keepcoding123',
-        'HOST': 'mysql.develjitsu.com',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     },
     # 'prod': {
