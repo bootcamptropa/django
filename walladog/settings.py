@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'walladog_dev',
         'USER': 'walladog',
         'PASSWORD': 'Keepcoding123',
-        'HOST': '127.0.0.1',
+        'HOST': 'mysql.develjitsu.com',
         'PORT': '3306',
     },
     # 'prod': {
