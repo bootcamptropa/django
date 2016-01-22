@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from images.models import Image
-from products.permissions import ProductPermission
+from products.permissions import ProductPermission, UserProductPermission
 from products.serializers import ProductsSerializer, ProductsListSerializer
 from products.models import Product
 
@@ -25,7 +25,7 @@ class ProductsViewSet (ModelViewSet):
 
         category_id_filter = self.request.query_params.get('category', None)
         race_id_filter = self.request.query_params.get('race', None)
-        state_id_filter = self.request.query_params.get('status', None)
+        state_id_filter = self.request.query_params.get('state', None)
 
         if latitude_update_string is not None and longitude_update_string is not None:
 
@@ -111,3 +111,35 @@ class ProductsViewSet (ModelViewSet):
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProductsViewSet (ModelViewSet):
+
+    permission_classes = [UserProductPermission]
+    serializer_class = ProductsListSerializer
+    queryset = Product.objects.filter(active=1)
+
+    def list(self, request, *args, **kwargs):
+
+        category_id_filter = self.request.query_params.get('category', None)
+        race_id_filter = self.request.query_params.get('race', None)
+        state_id_filter = self.request.query_params.get('state', None)
+
+        queryset = self.filter_queryset(self.get_queryset()).filter(seller=self.request.user.id)
+
+        if race_id_filter is not None:
+            queryset = queryset.filter(race=race_id_filter)
+
+        if state_id_filter is not None:
+            queryset = queryset.filter(state=category_id_filter)
+
+        if category_id_filter is not None:
+            queryset = queryset.filter(category=category_id_filter)
+
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = ProductsListSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = ProductsListSerializer(queryset, many=True)
+        return Response(serializer.data)
