@@ -52,7 +52,7 @@ INSTALLED_APPS = (
     #Rest_framework
     'rest_framework',
     'oauth2_provider',
-    'corsheaders'
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -165,7 +165,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://www.walladog.com',
     'walladog.com'
 )
-CORS_URLS_REGEX = r'^/api/.*$'
+# CORS_URLS_REGEX = r'^/api/.*$'
 
 STATIC_URL = '/static/'
 
