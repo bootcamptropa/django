@@ -1,6 +1,6 @@
+from django.contrib.gis.forms import PointField
 from rest_framework import serializers
 
-from drf_extra_fields.geo_fields import PointField
 from images.serializers import ImageSerializer
 from products.models import Product
 
