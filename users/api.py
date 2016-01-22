@@ -1,3 +1,4 @@
+import boto3
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -6,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from users.models import UserDetail
 from users.permissions import UserPermission, LoginPermission
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UserListSerializer
 
 
 class UserViewSet(GenericViewSet):
@@ -33,9 +34,25 @@ class UserViewSet(GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
 
+        upload_files_user = request.FILES.get('upload_image', None)
+
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            if upload_files_user is not None:
+
+                s3 = boto3.resource('s3')
+                bucket = s3.Bucket('walladog')
+                key_file = request.data['username'] + ".jpeg"
+                bucket.put_object(ACL='public-read', Key=key_file, Body=upload_files_user, ContentType='image/jpeg')
+                photo_url = "https://s3.amazonaws.com/walladog/" + key_file
+                new_user = serializer.save(avatar_url=photo_url)
+
+            else:
+
+                new_user = serializer.save()
+
+            serialize_bnew_user = UserListSerializer(new_user)
+            return Response(serialize_bnew_user.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,9 +69,22 @@ class UserViewSet(GenericViewSet):
         user = get_object_or_404(UserDetail, pk=pk)
         self.check_object_permissions(request, user)
         serializer = self.get_serializer(instance=user, data=request.data)
+
+        upload_files_user = request.FILES.get('upload_image', None)
+
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+            update_user = serializer.save()
+
+            if upload_files_user is not None:
+
+                s3 = boto3.resource('s3')
+                bucket = s3.Bucket('walladog')
+                key_file = request.data['username'] + ".jpeg"
+                bucket.put_object(ACL='public-read', Key=key_file, Body=upload_files_user, ContentType='image/jpeg')
+
+            serialize_bnew_user = UserListSerializer(update_user)
+            return Response(serialize_bnew_user.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

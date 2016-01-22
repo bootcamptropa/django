@@ -58,3 +58,15 @@ class UserSerializer(serializers.Serializer):
             raise serializers.ValidationError(u'Ya existe un usuario con ese username')
         else:
             return data
+
+class UserListSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='user.id')
+    first_name = serializers.CharField(allow_null=True, source='user.first_name', default='')
+    last_name = serializers.CharField(allow_null=True, source='user.last_name', default='')
+    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email')
+
+    class Meta:
+        model = UserDetail
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'avatar_url')
+
