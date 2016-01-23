@@ -28,6 +28,22 @@ class Product(models.Model):
         return str(self.location.y)
     longitude = property(_get_longitude)
 
+    def _get_race_id(self):
+        return str(0)
+    raceid = property(_get_race_id)
+
+    def _get_gender_id(self):
+        return str(0)
+    genderid = property(_get_gender_id)
+
+    def _get_state_id(self):
+        return str(0)
+    stateid = property(_get_state_id)
+
+    def _get_category_id(self):
+        return str(0)
+    categoryid = property(_get_category_id)
+
     def __unicode__(self):
         return self.name
 
