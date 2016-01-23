@@ -26,10 +26,10 @@ class UserViewSet(GenericViewSet):
         page = self.paginate_queryset(queryset)
 
         if page is not None:
-            serializer = self.get_serializer(page, many=True)
+            serializer = UserListSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = UserListSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request):
@@ -65,9 +65,8 @@ class UserViewSet(GenericViewSet):
 
         user = get_object_or_404(UserDetail, pk=pk)
         self.check_object_permissions(request, user)
-        serializer = self.get_serializer(user)
-        serialized_user = serializer.data
-        return Response(serialized_user)
+        serializer = UserListSerializer(user)
+        return Response(serializer.data)
 
     def update(self, request, pk):
 
@@ -110,7 +109,7 @@ class LoginViewSet(GenericViewSet):
 
     permission_classes = [LoginPermission]
     queryset = UserDetail.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserListSerializer
 
     def list(self, request, *args, **kwargs):
 
