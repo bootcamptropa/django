@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class UserDetail(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     longitude = models.FloatField(null=True)
@@ -13,6 +14,11 @@ class UserDetail(models.Model):
     def _get_avatar_thumbnail_url(self):
         return "https://s3.amazonaws.com/walladog/thumbnails/" + self.user.username + ".png"
     avatar_thumbnail_url = property(_get_avatar_thumbnail_url)
+
+    def _get_products_count(self):
+        from products.models import Product
+        return Product.objects.filter(seller=self.user.id).count()
+    products_count = property(_get_products_count)
 
     def __unicode__(self):
         if self.user.first_name or self.user.last_name:
