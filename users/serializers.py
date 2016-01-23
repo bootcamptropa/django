@@ -68,7 +68,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDetail
-        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'avatar_url', 'avatar_thumbnail_url')
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'avatar_url', 'avatar_thumbnail_url', 'products_count')
 
 class UserPublicListSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
@@ -78,6 +78,6 @@ class UserPublicListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDetail
-        fields = ('id', 'first_name', 'last_name', 'username', 'avatar_url', 'avatar_thumbnail_url')
+        fields = ('id', 'first_name', 'last_name', 'username', 'avatar_url', 'avatar_thumbnail_url', 'products_count')
 
 
