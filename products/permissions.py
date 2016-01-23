@@ -10,3 +10,9 @@ class ProductPermission(BasePermission):
             return request.user.is_authenticated()
         else:
             return request.user.is_authenticated() and request.user.is_staff
+
+
+class UserProductPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated()
