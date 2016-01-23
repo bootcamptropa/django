@@ -102,7 +102,7 @@ class ProductsViewSet (ModelViewSet):
                 bucket.put_object(ACL='public-read', Key=key_file, Body=up_file, ContentType='image/jpeg')
 
                 photo_url = "https://s3.amazonaws.com/walladog/" + str(uuid_id) + ".jpeg"
-                photo_thumbnail_url = "https://s3.amazonaws.com/walladog/" + str(uuid_id) + "-thumbnail.jpeg"
+                photo_thumbnail_url = "https://s3.amazonaws.com/walladog/thumbnails/" + str(uuid_id) + ".png"
                 image_product = Image(name=str(uuid_id),
                                       product=product,
                                       photo_url=photo_url,
