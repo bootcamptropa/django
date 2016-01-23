@@ -1,4 +1,6 @@
 import boto3
+
+from boto3.session import Session
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -40,7 +42,10 @@ class UserViewSet(GenericViewSet):
 
             if upload_files_user is not None:
 
-                s3 = boto3.resource('s3')
+                session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
+                  aws_secret_access_key='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')
+
+                s3 = session.resource('s3')
                 bucket = s3.Bucket('walladog')
                 key_file = request.data['username'] + ".jpeg"
                 bucket.put_object(ACL='public-read', Key=key_file, Body=upload_files_user, ContentType='image/jpeg')
@@ -78,7 +83,10 @@ class UserViewSet(GenericViewSet):
 
             if upload_files_user is not None:
 
-                s3 = boto3.resource('s3')
+                session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
+                  aws_secret_access_key='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')
+
+                s3 = session.resource('s3')
                 bucket = s3.Bucket('walladog')
                 key_file = request.data['username'] + ".jpeg"
                 bucket.put_object(ACL='public-read', Key=key_file, Body=upload_files_user, ContentType='image/jpeg')
