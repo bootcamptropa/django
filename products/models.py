@@ -29,19 +29,15 @@ class Product(models.Model):
     longitude = property(_get_longitude)
 
     def _get_race_id(self):
-        return str(0)
+        return str(self.race.id)
     raceid = property(_get_race_id)
 
-    def _get_gender_id(self):
-        return str(0)
-    genderid = property(_get_gender_id)
-
     def _get_state_id(self):
-        return str(0)
+        return str(self.state.id)
     stateid = property(_get_state_id)
 
     def _get_category_id(self):
-        return str(0)
+        return str(self.category.id)
     categoryid = property(_get_category_id)
 
     def __unicode__(self):
