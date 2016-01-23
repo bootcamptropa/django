@@ -1,5 +1,6 @@
 import uuid
 import boto3
+from boto3.session import Session
 from django.contrib.gis.geos import LineString, Point
 
 from django.shortcuts import get_object_or_404
@@ -87,7 +88,10 @@ class ProductsViewSet (ModelViewSet):
 
             product = serializer.save(seller=request.user.userdetail,location=Point(float(latitude), float(longitude)))
 
-            s3 = boto3.resource('s3')
+            session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
+                  aws_secret_access_key='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')
+
+            s3 = session.resource('s3')
             bucket = s3.Bucket('walladog')
 
             for index in range(len(upload_files)):
