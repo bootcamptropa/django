@@ -17,7 +17,7 @@ class UserDetail(models.Model):
 
     def _get_products_count(self):
         from products.models import Product
-        return Product.objects.filter(seller=self.user.id).count()
+        return Product.objects.filter(seller=self.user.id).filter(active=1).count()
     products_count = property(_get_products_count)
 
     def __unicode__(self):
