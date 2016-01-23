@@ -10,6 +10,10 @@ class UserDetail(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def _get_avatar_thumbnail_url(self):
+        return "https://s3.amazonaws.com/walladog/thumbnails/" + self.user.username + ".png"
+    avatar_thumbnail_url = property(_get_avatar_thumbnail_url)
+
     def __unicode__(self):
         if self.user.first_name or self.user.last_name:
             return self.user.first_name + " " + self.user.last_name

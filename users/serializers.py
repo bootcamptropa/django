@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 from users.models import UserDetail
 from rest_framework import serializers
 
-
-
 class UserSerializer(serializers.Serializer):
 
     id = serializers.ReadOnlyField(source='user.id')
@@ -70,5 +68,16 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDetail
-        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'avatar_url')
+        fields = ('id', 'first_name', 'last_name', 'username', 'email', 'avatar_url', 'avatar_thumbnail_url')
+
+class UserPublicListSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='user.id')
+    first_name = serializers.CharField(allow_null=True, source='user.first_name', default='')
+    last_name = serializers.CharField(allow_null=True, source='user.last_name', default='')
+    username = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = UserDetail
+        fields = ('id', 'first_name', 'last_name', 'username', 'avatar_url', 'avatar_thumbnail_url')
+
 
