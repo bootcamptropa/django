@@ -32,10 +32,6 @@ class Product(models.Model):
         return str(self.race.id)
     raceid = property(_get_race_id)
 
-    def _get_gender_id(self):
-        return str(self.gender.id)
-    genderid = property(_get_gender_id)
-
     def _get_state_id(self):
         return str(self.state.id)
     stateid = property(_get_state_id)
