@@ -36,7 +36,7 @@ class ProductsViewSet (ModelViewSet):
             lon2 = float(longitude_update_string) + 10 / (111.1 / cos(radians(float(latitude_update_string))))
             lat2 = float(latitude_update_string) + 10 / 111.1
 
-            line_string = 'LINESTRING (' + str(lat1) + ' ' + str(lon1) + ', ' + str(lat2) + ' ' + str(lon2) + ')'
+            line_string = 'LINESTRING (' + str(lon1) + ' ' + str(lat1) + ', ' + str(lon2) + ' ' + str(lat2) + ')'
             queryset = Product.objects.filter(location__contained=line_string).filter(active=1)
         else:
             queryset = Product.objects.filter(active=1)
@@ -86,7 +86,7 @@ class ProductsViewSet (ModelViewSet):
             if longitude is None:
                 return Response({"longitude": "Not have longitude"}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = serializer.save(seller=request.user.userdetail,location=Point(float(latitude), float(longitude)))
+            product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)))
 
             session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
                   aws_secret_access_key='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')
