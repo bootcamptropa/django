@@ -103,7 +103,7 @@ class ProductsViewSet (ModelViewSet):
             if longitude is None:
                 return Response({"longitude": "Not have longitude"}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)))
+            product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)),active=True)
 
             session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
                   aws_secret_access_key='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')
