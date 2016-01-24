@@ -14,18 +14,33 @@ class TransactionsViewSet(GenericViewSet):
 
     serializer_class = TransactionsSerializer
     permission_classes = (TransactionPermission,)
+    queryset = Transaction.objects.filter()
 
     def list(self, request):
-        self.serializer_class = TransactionsListSerializer
-        queryset = Transaction.objects.filter(Q(buyer=self.request.user) | Q(seller=self.request.user))
-        page = self.paginate_queryset(queryset)
 
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        if self.request.user.is_staff:
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+            queryset = self.get_queryset()
+            page = self.paginate_queryset(queryset)
+
+            if page is not None:
+                serializer = TransactionsListSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = TransactionsListSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        else:
+
+            queryset = Transaction.objects.filter(Q(buyer=self.request.user) | Q(seller=self.request.user))
+            page = self.paginate_queryset(queryset)
+
+            if page is not None:
+                serializer = TransactionsListSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = TransactionsListSerializer(queryset, many=True)
+            return Response(serializer.data)
 
     def create(self, request):
 
@@ -36,21 +51,18 @@ class TransactionsViewSet(GenericViewSet):
         if serializer.is_valid():
 
             transaction_save = serializer.save(buyer=self.request.user, seller=product.seller.user)
-            return Response(transaction_save.id, status=status.HTTP_201_CREATED)
+            serialize_list = TransactionsListSerializer(transaction_save)
+            return Response(serialize_list.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk):
 
-        self.serializer_class = TransactionsListSerializer
-
         transaction = get_object_or_404(Transaction, pk=pk)
         self.check_object_permissions(request, transaction)
+        serializer = TransactionsListSerializer(transaction)
 
-        serializer = self.get_serializer(transaction)
-        serialized_transaction = serializer.data
-
-        return Response(serialized_transaction)
+        return Response(serializer.data)
 
     def get_paginated_response(self, data):
 
