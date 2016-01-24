@@ -14,18 +14,33 @@ class TransactionsViewSet(GenericViewSet):
 
     serializer_class = TransactionsSerializer
     permission_classes = (TransactionPermission,)
+    queryset = Transaction.objects.filter()
 
     def list(self, request):
 
-        queryset = Transaction.objects.filter(Q(buyer=self.request.user) | Q(seller=self.request.user))
-        page = self.paginate_queryset(queryset)
+        if self.request.user.is_staff:
 
-        if page is not None:
-            serializer = TransactionsListSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            queryset = self.get_queryset()
+            page = self.paginate_queryset(queryset)
 
-        serializer = TransactionsListSerializer(queryset, many=True)
-        return Response(serializer.data)
+            if page is not None:
+                serializer = TransactionsListSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = TransactionsListSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        else:
+
+            queryset = Transaction.objects.filter(Q(buyer=self.request.user) | Q(seller=self.request.user))
+            page = self.paginate_queryset(queryset)
+
+            if page is not None:
+                serializer = TransactionsListSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = TransactionsListSerializer(queryset, many=True)
+            return Response(serializer.data)
 
     def create(self, request):
 
