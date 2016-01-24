@@ -28,15 +28,29 @@ class ProductsViewSet (ModelViewSet):
         race_id_filter = self.request.query_params.get('race', None)
         state_id_filter = self.request.query_params.get('state', None)
 
+        distance_filter = self.request.query_params.get('distance', None)
+
+        name_filter = self.request.query_params.get('name', None)
+
         if latitude_update_string is not None and longitude_update_string is not None:
 
-            lon1 = float(longitude_update_string) - 10 / (111.1 / cos(radians(float(latitude_update_string))))
-            lat1 = float(latitude_update_string) - 10 / 111.1
+            if distance_filter is not None:
 
-            lon2 = float(longitude_update_string) + 10 / (111.1 / cos(radians(float(latitude_update_string))))
-            lat2 = float(latitude_update_string) + 10 / 111.1
+                lon1 = float(longitude_update_string) - int(distance_filter) / (111.1 / cos(radians(float(latitude_update_string))))
+                lat1 = float(latitude_update_string) - int(distance_filter) / 111.1
 
-            line_string = 'LINESTRING (' + str(lat1) + ' ' + str(lon1) + ', ' + str(lat2) + ' ' + str(lon2) + ')'
+                lon2 = float(longitude_update_string) + int(distance_filter) / (111.1 / cos(radians(float(latitude_update_string))))
+                lat2 = float(latitude_update_string) + int(distance_filter) / 111.1
+
+            else:
+
+                lon1 = float(longitude_update_string) - 10 / (111.1 / cos(radians(float(latitude_update_string))))
+                lat1 = float(latitude_update_string) - 10 / 111.1
+
+                lon2 = float(longitude_update_string) + 10 / (111.1 / cos(radians(float(latitude_update_string))))
+                lat2 = float(latitude_update_string) + 10 / 111.1
+
+            line_string = 'LINESTRING (' + str(lon1) + ' ' + str(lat1) + ', ' + str(lon2) + ' ' + str(lat2) + ')'
             queryset = Product.objects.filter(location__contained=line_string).filter(active=1)
         else:
             queryset = Product.objects.filter(active=1)
@@ -49,6 +63,9 @@ class ProductsViewSet (ModelViewSet):
 
         if category_id_filter is not None:
             queryset = queryset.filter(category=category_id_filter)
+
+        if name_filter is not None:
+            queryset = queryset.filter(name__contains=name_filter)
 
         page = self.paginate_queryset(queryset)
 
@@ -86,7 +103,7 @@ class ProductsViewSet (ModelViewSet):
             if longitude is None:
                 return Response({"longitude": "Not have longitude"}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = serializer.save(seller=request.user.userdetail,location=Point(float(latitude), float(longitude)))
+            product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)))
 
             session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
                   aws_secret_access_key='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')

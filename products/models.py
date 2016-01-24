@@ -21,12 +21,24 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def _get_latitude(self):
-        return str(self.location.x)
+        return str(self.location.y)
     latitude = property(_get_latitude)
 
     def _get_longitude(self):
-        return str(self.location.y)
+        return str(self.location.x)
     longitude = property(_get_longitude)
+
+    def _get_race_id(self):
+        return str(self.race.id)
+    raceid = property(_get_race_id)
+
+    def _get_state_id(self):
+        return str(self.state.id)
+    stateid = property(_get_state_id)
+
+    def _get_category_id(self):
+        return str(self.category.id)
+    categoryid = property(_get_category_id)
 
     def __unicode__(self):
         return self.name
