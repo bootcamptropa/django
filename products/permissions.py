@@ -6,7 +6,7 @@ class ProductPermission(BasePermission):
 
         if view.action in ['list', 'metadata', 'retrieve']:
             return True
-        elif view.action in ['create']:
+        elif view.action in ['create', 'update']:
             return request.user.is_authenticated()
         else:
             return request.user.is_authenticated() and request.user.is_staff
