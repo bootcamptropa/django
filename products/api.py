@@ -12,6 +12,9 @@ from images.models import Image
 from products.permissions import ProductPermission, UserProductPermission
 from products.serializers import ProductsSerializer, ProductsListSerializer
 from products.models import Product
+from races.models import Race
+from states.models import State
+
 
 class ProductsViewSet (ModelViewSet):
 
@@ -92,6 +95,8 @@ class ProductsViewSet (ModelViewSet):
 
         if serializer.is_valid():
 
+            state = get_object_or_404(State, pk=1)
+
             upload_files = request.FILES.getlist('upload_image')
 
             if upload_files is None or not upload_files:
@@ -103,7 +108,13 @@ class ProductsViewSet (ModelViewSet):
             if longitude is None:
                 return Response({"longitude": "Not have longitude"}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)),active=True)
+            race = self.request.POST.get('race', None)
+
+            if race is None and request.data['category'] != 1:
+                race = get_object_or_404(Race, pk=10000)
+                product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)),active=True, state=state, race=race)
+            else:
+                product = serializer.save(seller=request.user.userdetail,location=Point(float(longitude), float(latitude)),active=True, state=state)
 
             session = Session(aws_access_key_id='AKIAJYDV7TEBJS6JWEEQ',
                   aws_secret_access_key='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')
