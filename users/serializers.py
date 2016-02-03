@@ -54,6 +54,7 @@ class UserSerializer(serializers.Serializer):
         if userData.get('token_facebook', None) is not None:
             instance.token_facebook = validated_data.get('token_facebook')
 
+        instance.save()
         instance.user.save()
 
         return instance
