@@ -45,13 +45,13 @@ class UserSerializer(serializers.Serializer):
             instance.user.email = userData.get('email')
         if userData.get('password', None) is not None:
             instance.user.set_password(userData.get('password'))
-        if userData.get('latitude', None) is not None:
+        if validated_data.get('latitude', None) is not None:
             instance.latitude = validated_data.get('latitude')
-        if userData.get('longitude', None) is not None:
+        if validated_data.get('longitude', None) is not None:
             instance.longitude = validated_data.get('longitude')
-        if userData.get('avatar_url', None) is not None:
+        if validated_data.get('avatar_url', None) is not None:
             instance.avatar_url = validated_data.get('avatar_url')
-        if userData.get('token_facebook', None) is not None:
+        if validated_data.get('token_facebook', None) is not None:
             instance.token_facebook = validated_data.get('token_facebook')
 
         instance.save()
