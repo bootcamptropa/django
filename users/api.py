@@ -72,7 +72,7 @@ class UserViewSet(GenericViewSet):
 
         user = get_object_or_404(UserDetail, pk=pk)
         self.check_object_permissions(request, user)
-        serializer = self.get_serializer(instance=user, data=request.data)
+        serializer = self.get_serializer(instance=user, data=request.data, partial=True)
 
         upload_files_user = request.FILES.get('upload_image', None)
 
