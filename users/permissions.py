@@ -11,7 +11,7 @@ class UserPermission(BasePermission):
 
     def has_object_permission(self, request, view, user):
 
-        return request.user.is_superuser or request.user == user
+        return request.user.is_superuser or request.user == user.user
 
 class LoginPermission(BasePermission):
 

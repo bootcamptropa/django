@@ -54,7 +54,7 @@ class UserSerializer(serializers.Serializer):
         users = User.objects.filter(username=data)
         if not self.instance and len(users) != 0:
             raise serializers.ValidationError(u'Ya existe un usuario con ese username')
-        elif self.instance and self.instance.username != data and len(users) != 0:
+        elif self.instance and self.instance.user.username != data and len(users) != 0:
             raise serializers.ValidationError(u'Ya existe un usuario con ese username')
         else:
             return data
