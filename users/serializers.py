@@ -35,17 +35,27 @@ class UserSerializer(serializers.Serializer):
 
         userData = validated_data.get('user')
 
-        instance.user.first_name = userData.get('first_name')
-        instance.user.last_name = userData.get('last_name')
-        instance.user.username = userData.get('username')
-        instance.user.email = userData.get('email')
-        instance.user.set_password(userData.get('password'))
-        instance.latitude = validated_data.get('latitude')
-        instance.longitude = validated_data.get('longitude')
-        instance.avatar_url = validated_data.get('avatar_url')
-        instance.token_facebook = validated_data.get('token_facebook')
+        if userData.get('first_name', None) is not None:
+            instance.user.first_name = userData.get('first_name')
+        if userData.get('last_name', None) is not None:
+            instance.user.last_name = userData.get('last_name')
+        if userData.get('username', None) is not None:
+            instance.user.username = userData.get('username')
+        if userData.get('email', None) is not None:
+            instance.user.email = userData.get('email')
+        if userData.get('password', None) is not None:
+            instance.user.set_password(userData.get('password'))
+        if validated_data.get('latitude', None) is not None:
+            instance.latitude = validated_data.get('latitude')
+        if validated_data.get('longitude', None) is not None:
+            instance.longitude = validated_data.get('longitude')
+        if validated_data.get('avatar_url', None) is not None:
+            instance.avatar_url = validated_data.get('avatar_url')
+        if validated_data.get('token_facebook', None) is not None:
+            instance.token_facebook = validated_data.get('token_facebook')
 
         instance.save()
+        instance.user.save()
 
         return instance
 
@@ -54,7 +64,7 @@ class UserSerializer(serializers.Serializer):
         users = User.objects.filter(username=data)
         if not self.instance and len(users) != 0:
             raise serializers.ValidationError(u'Ya existe un usuario con ese username')
-        elif self.instance and self.instance.username != data and len(users) != 0:
+        elif self.instance and self.instance.user.username != data and len(users) != 0:
             raise serializers.ValidationError(u'Ya existe un usuario con ese username')
         else:
             return data
