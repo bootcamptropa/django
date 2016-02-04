@@ -87,7 +87,7 @@ class UserViewSet(GenericViewSet):
 
                 s3 = session.resource('s3')
                 bucket = s3.Bucket('walladog')
-                key_file = request.data['username'] + ".jpeg"
+                key_file = user.user.username + ".jpeg"
                 bucket.put_object(ACL='public-read', Key=key_file, Body=upload_files_user, ContentType='image/jpeg')
 
             serialize_bnew_user = UserListSerializer(update_user)
