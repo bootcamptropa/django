@@ -99,9 +99,6 @@ class ProductsViewSet (ModelViewSet):
 
             upload_files = request.FILES.getlist('upload_image')
 
-            if upload_files is None or not upload_files:
-                return Response({"upload_image": "Not have images"}, status=status.HTTP_400_BAD_REQUEST)
-
             if latitude is None:
                 return Response({"latitude": "Not have latitude"}, status=status.HTTP_400_BAD_REQUEST)
 
