@@ -54,15 +54,15 @@ class ProductsViewSet (ModelViewSet):
                 lat2 = float(latitude_update_string) + 10 / 111.1
 
             line_string = 'LINESTRING (' + str(lon1) + ' ' + str(lat1) + ', ' + str(lon2) + ' ' + str(lat2) + ')'
-            queryset = Product.objects.filter(location__contained=line_string).filter(active=1)
+            queryset = Product.objects.filter(location__contained=line_string).filter(active=1).filter(state=1)
         else:
-            queryset = Product.objects.filter(active=1)
+            queryset = Product.objects.filter(active=1).filter(state=1)
 
         if race_id_filter is not None:
             queryset = queryset.filter(race=race_id_filter)
 
         if state_id_filter is not None:
-            queryset = queryset.filter(state=category_id_filter)
+            queryset = queryset.filter(state=state_id_filter)
 
         if category_id_filter is not None:
             queryset = queryset.filter(category=category_id_filter)
