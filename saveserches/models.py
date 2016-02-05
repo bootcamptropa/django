@@ -10,6 +10,7 @@ class SavedSearch(models.Model):
     latitude = models.FloatField(null=True)
     category = models.ForeignKey(Category)
     race = models.ForeignKey(Race)
+    name = models.CharField(max_length=60)
 
     def __unicode__(self):
         return self.keywords

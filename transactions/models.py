@@ -9,4 +9,7 @@ class Transaction(models.Model):
     date_transaction = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.product
+        return self.product.name
+
+    def __str__(self):
+        return self.product.name

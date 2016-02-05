@@ -1,38 +1,26 @@
-
 from rest_framework import serializers
+
+from images.serializers import ImageSerializer
 from products.models import Product
+from users.serializers import UserPublicListSerializer
 
 
 class ProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
+        fields = ('id', 'name', 'race', 'gender', 'sterile', 'description', 'state', 'price', 'category',
+                  'active', 'created_at')
 
-        # read_only_fields = ('category', 'state', 'races', 'seller')
+class ProductsListSerializer(serializers.ModelSerializer):
 
-# class ProductsListSerializer(serializers.ModelSerializer):
-#
-#     category = serializers.StringRelatedField()
-#     state = serializers.StringRelatedField()
-#     seller = serializers.StringRelatedField()
-#
-#     class Meta(ProductsSerializer.Meta):
-#         fields = ('id', 'name', 'price', 'description', 'category', 'state', 'seller', 'images')
+    race = serializers.StringRelatedField()
+    state = serializers.StringRelatedField()
+    category = serializers.StringRelatedField()
+    images = ImageSerializer(many=True)
+    seller = UserPublicListSerializer()
 
-
-
-
-
-    # def create(self, validated_data):
-    #     instance = Product()
-    #     product_data = validated_data.get('product')
-    #     product = Product.objects.create_user(username=product_data.get('username'),
-    #                                           email=product_data.get('email'),
-    #                                           password=product_data.get('password'),
-    #                                           first_name=product_data.get('first_name'),
-    #                                           last_name=product_data.get('last_name'))
-    #     if product:
-    #         instance.product = product
-    #         product_ext = self.update(instance, validated_data)
-    #
-    #     return product_ext
+    class Meta:
+        model = Product
+        fields = ('id', 'name', 'race', 'gender', 'seller', 'sterile', 'description', 'state', 'price', 'category',
+                  'active', 'latitude', 'longitude', 'created_at', 'updated_at', 'images', 'raceid', 'stateid', 'categoryid')

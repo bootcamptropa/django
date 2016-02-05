@@ -51,18 +51,21 @@ INSTALLED_APPS = (
 
     #Rest_framework
     'rest_framework',
-    'oauth2_provider'
+    'oauth2_provider',
+    'corsheaders',
+    'django.contrib.gis',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware'
 )
 
 ROOT_URLCONF = 'walladog.urls'
@@ -90,7 +93,7 @@ WSGI_APPLICATION = 'walladog.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'walladog_dev',
         'USER': 'walladog',
         'PASSWORD': 'Keepcoding123',
@@ -134,10 +137,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
-
 # REST FRAMEWORK
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
@@ -145,6 +147,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata'
 }
 
 OAUTH2_PROVIDER = {
@@ -154,3 +157,31 @@ OAUTH2_PROVIDER = {
         'write': 'Write scope',
         'groups': 'Access to your groups'}
 }
+
+# CORS
+# APPEND_SLASH = False
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:9000',
+    'http://www.walladog.com',
+    'walladog.com'
+)
+# CORS_URLS_REGEX = r'^/api/.*$'
+
+STATIC_URL = '/static/'
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+
+#
+# AWS_ACCESS_KEY_ID = 'AKIAJYDV7TEBJS6JWEEQ'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'walladog'
+
+
+# AWS_QUERYSTRING_AUTH = False
+# AWS_ACCESS_KEY_ID = os.environ['AKIAJYDV7TEBJS6JWEEQ']
+# AWS_SECRET_ACCESS_KEY = os.environ['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']
+# AWS_STORAGE_BUCKET_NAME = os.environ['walladog']
+# MEDIA_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
